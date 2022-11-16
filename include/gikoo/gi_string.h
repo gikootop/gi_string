@@ -2,15 +2,20 @@
  * @brief GiKoo字符串类
  *
  * @file gi_string.h
+ * @version 0.1.0
  *
  * @details
- *  PI参考的Java文档版本:
- *  1. https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html
- *  2. https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/StringBuffer.html
+ *  1. PI参考的Java文档版本:
+ *      a. https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html
+ *      b. https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/StringBuffer.html
+ *
+ *  2. 当前接口未实现实装。
+ *
  */
 
 #include <cstdlib>
 #include <vector>
+#include <climits>
 
 namespace GiKoo
 {
@@ -75,7 +80,9 @@ namespace GiKoo
          * @brief 是否符合指定正则表达式
          *
          * @param regex 正则表达式
-         * @return
+         *
+         * @retval true 正则表达式匹配成功
+         * @retval false 正则表达式匹配失败
          */
         bool matches(const char *regex) const;
 
@@ -83,48 +90,49 @@ namespace GiKoo
          * @brief 是否包含指定字符串
          *
          * @param str 指定字符串
-         * @return
+         *
+         * @retval true 包含指定字符串
+         * @retval false 不包含指定字符串
          */
         bool contains(const GiString &str) const;
 
         /**
-         * @brief Returns true if the string is empty or contains only white space codeposize_ts, otherwise false.
+         * @brief 字符串是否为空，或者只包含空格
          *
-         * @return
+         * @retval true 字符串为空，或者只包含空格
+         * @retval false 字符串包含非空格字符
          */
         bool isBlank() const;
 
         /**
-         * @brief Returns true if, and only if, length() is 0.
+         * @brief 字符串是否为空，即长度为0
          *
-         * @return
+         * @retval true 空字符串
+         * @retval false 非空字符串
          */
         bool isEmpty() const;
 
-    public: // 修改类API
+    public: // 返回新GiString
         /**
-         * @brief Returns a string whose value is this string, with all leading and trailing white space removed.
+         * @brief 移除字符串头部和尾部的空格
          *
-         * @details If this String object represents an empty string, or if all code posize_ts in this string are white space, then an empty string is returned.\
-         *      Otherwise, returns a substring of this string beginning with the first code posize_t that is not a white space up to and including the last code posize_t that is not a white space.\
-         *      This method may be used to strip white space from the beginning and end of a string.
-         * @return A string whose value is this string, with all leading and trailing white space removed.
+         * @return 修改后的字符串副本
          */
-        GiString &strip();
+        GiString strip();
 
         /**
-         * @brief Returns a string whose value is this string, with all leading white space removed.
+         * @brief 移除字符串头部的空格
          *
-         * @return
+         * @return 修改后的字符串副本
          */
-        GiString &stripLeading();
+        GiString stripLeading();
 
         /**
-         * @brief Returns a string whose value is this string, with all trailing white space removed.
+         * @brief 移除字符串尾部的空格
          *
-         * @return
+         * @return 修改后的字符串副本
          */
-        GiString &stripTrailing();
+        GiString stripTrailing();
 
         /**
          * @brief Returns a string whose value is this string, with all leading and trailing space removed, where space is defined as any character whose codeposize_t is less than or equal to 'U+0020' (the space character).
@@ -133,89 +141,95 @@ namespace GiKoo
          *      Otherwise, if all characters in this string are space (as defined above), then a String object representing an empty string is returned.\
          *      Otherwise, let k be the index of the first character in the string whose code is not a space (as defined above) and let m be the index of the last character in the string whose code is not a space (as defined above). A String object is returned, representing the substring of this string that begins with the character at index k and ends with the character at index m-that is, the result of this.substring(k, m + 1).\
          *      This method may be used to trim space (as defined above) from the beginning and end of a string.
+         *
          * @return A string whose value is this string, with all leading and trailing space removed, or this string if it has no leading or trailing space.
          */
-        GiString &trim();
+        GiString trim();
 
         /**
-         * @brief Converts all of the characters in this String to lower case.
+         * @brief 切换为全小写字符
          *
-         * @return
+         * @return 替换后的字符串副本
          */
         GiString toLowerCase() const;
 
         /**
-         * @brief Converts all of the characters in this String to upper case.
+         * @brief 切换为全大写字符
          *
-         * @return
-         * @return
+         * @return 替换后的字符串副本
          */
         GiString toUpperCase() const;
 
         /**
-         * @brief Returns a string resulting from replacing all occurrences of oldChar in this string with newChar.
+         * @brief 使用新字符替换旧字符
          *
-         * @param oldChar
-         * @param newChar
-         * @return
+         * @param oldChar 旧字符
+         * @param newChar 新字符
+         *
+         * @return 替换后的字符串副本
          */
-        GiString &replace(char oldChar, char newChar);
+        GiString replace(char oldChar, char newChar) const;
 
         /**
-         * @brief Replaces each substring of this string that matches the oldStr with the specified newStr.
+         * @brief 使用新字符串替换旧字符串
          *
-         * @param oldStr
-         * @param newStr
-         * @return
+         * @param oldStr 旧字符串
+         * @param newStr 新字符串
+         *
+         * @return 替换后的字符串副本
          */
-        GiString &replace(const GiString &oldStr, const GiString &newStr);
+        GiString replace(const GiString &oldStr, const GiString &newStr) const;
 
-    public: // 返回新GiString
         /**
          * @brief 字符串链接，不会改变当前字符串
          *
          * @param str 待追加的字符
+         *
          * @return 新的字符串副本
          */
         GiString concat(const GiString &str) const;
 
         /**
-         * @brief Splits this string around matches of the given regular expression.
+         * @brief 根据指定正则表达式进行拆分
          *
-         * @param regex Regular expression.
-         * @return Vector of results.
+         * @param regex 指定正则表达式
+         *
+         * @return 结果集合
          */
         std::vector<GiString> split(const GiString &regex) const;
 
         /**
-         * @brief Returns lines extracted from this string.
+         * @brief 根据字符串中的换行符进行拆分
          *
-         * @return Vector of results.
+         * @return 结果集合
          */
         std::vector<GiString> lines() const;
 
         /**
-         * @brief Returns a formatted string using the specified format string and arguments.
+         * @brief 根据指定格式构建字符串
          *
-         * @param fmt The specified format string.
-         * @return
+         * @param fmt 指定格式
+         *
+         * @return 格式化后的新副本
          */
         static GiString format(const GiString &fmt, ...);
 
         /**
-         * @brief Returns a string that is a substring of this string.
+         * @brief 获取子字符串
          *
-         * @param offset
-         * @return
+         * @param offset 起点
+         *
+         * @return 子字符串
          */
         GiString subString(size_t offset) const;
 
         /**
-         * @brief Returns a string that is a substring of this string.
+         * @brief 获取子字符串
          *
-         * @param offset
-         * @param length
-         * @return
+         * @param offset 起点
+         * @param length 长度
+         *
+         * @return 子字符串
          */
         GiString subString(size_t offset, size_t length) const;
 
@@ -226,6 +240,7 @@ namespace GiKoo
          * @note 如果index是非法数值，将返回0
          *
          * @param index 指定位置
+         *
          * @return 字符
          */
         char charAt(size_t index) const;
@@ -236,116 +251,129 @@ namespace GiKoo
          * @note 如果index是非法数值，将返回0
          *
          * @param index 指定位置
+         *
          * @return 字符
          */
         char operator[](size_t index) const;
 
         /**
-         * @brief Returns the index within this string of the first occurrence of the specified character.
+         * @brief 查询指定字符
          *
-         * @param ch The specified character
-         * @return
+         * @param ch 指定字符
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t indexOf(char ch) const;
 
         /**
-         * @brief Returns the index within this string of the first occurrence of the specified character, starting the search at the specified index.
+         * @brief 查询指定字符
          *
-         * @param ch The specified character
+         * @param ch 指定字符
          * @param offset The specified index
-         * @return
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t indexOf(char ch, size_t offset) const;
 
         /**
-         * @brief Returns the index within this string of the first occurrence of the specified string.
+         * @brief 查询指定字符串
          *
-         * @param str The specified string
-         * @return
+         * @param str 指定字符串
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t indexOf(const GiString &str) const;
 
         /**
-         * @brief Returns the index within this string of the first occurrence of the specified string, starting the search at the specified index.
+         * @brief 查询指定字符串
          *
-         * @param str The specified string
+         * @param str 指定字符串
          * @param offset The specified index
-         * @return
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t indexOf(const GiString &str, size_t offset) const;
 
         /**
-         * @brief Returns the index within this string of the last occurrence of the specified character.
+         * @brief 倒序查询指定字符
          *
-         * @param ch The specified character
-         * @return
+         * @param ch 指定字符
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t lastIndexOf(char ch) const;
 
         /**
-         * @brief Returns the index within this string of the last occurrence of the specified character, searching backward starting at the specified index.
+         * @brief 倒序查询指定字符
          *
-         * @param ch The specified character
-         * @param offset The specified index
-         * @return
+         * @param ch 指定字符
+         * @param offset 判断的起点
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t lastIndexOf(char ch, size_t offset) const;
 
         /**
-         * @brief Returns the index within this string of the last occurrence of the specified string.
+         * @brief 倒序查询指定字符串
          *
-         * @param str The specified string
-         * @return
+         * @param str 指定字符串
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t lastIndexOf(const GiString &str) const;
 
         /**
-         * @brief Returns the index within this string of the last occurrence of the specified string, searching backward starting at the specified index.
+         * @brief 倒序查询指定字符串
          *
-         * @param str The specified string
-         * @param offset The specified index
-         * @return
+         * @param str 指定字符串
+         * @param offset 判断的起点
+         *
+         * @return 查询结果。如果未查询到，返回SIZE_MAX
          */
         size_t lastIndexOf(const GiString &str, size_t offset) const;
 
         /**
-         * @brief The length of this string.
+         * @brief 获得字符串长度
          *
-         * @return The length of this string.
+         * @return 字符串长度
          */
         size_t length() const;
 
         /**
-         * @brief Returns a hash code for this string.
+         * @brief 获得字符串的hash数值
          *
-         * @return
+         * @return hash数值
          */
         size_t hashCode() const;
 
         /**
-         * @brief Tests if this string starts with the specified prefix.
-
-         * @param prefix The specified prefix.
-         * @retval true Starts with the specified prefix.
-         * @retval false Not starts with the specified prefix.
+         * @brief 是否包含指定前缀
+         *
+         * @param prefix 前缀
+         *
+         * @retval true 包含
+         * @retval false 不包含
          */
         bool startsWith(const GiString &prefix) const;
 
         /**
-         * @brief Tests if the substring of this string beginning at the specified index starts with the specified prefix.
+         * @brief 是否包含指定前缀
          *
-         * @param prefix The specified prefix.
-         * @param offset Substring's beginning index.
-         * @retval true Starts with the specified prefix.
-         * @retval false Not starts with the specified prefix.
+         * @param prefix 前缀
+         * @param offset 判断的起点
+         *
+         * @retval true 包含
+         * @retval false 不包含
          */
         bool startsWith(const GiString &prefix, size_t offset) const;
 
         /**
-         * @brief Tests if this string ends with the specified suffix.
+         * @brief 是否包含指定后缀
          *
-         * @param suffix
-         * @return
+         * @param suffix 后缀
+         *
+         * @retval true 包含
+         * @retval false 不包含
          */
         bool endsWith(const GiString &suffix) const;
     };
