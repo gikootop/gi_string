@@ -1,8 +1,8 @@
-# gstring
+# GiString(GiKoo字符串类)
 
 ## 介绍
 
-对std::string进行扩展，实现一个内存安全，可以开箱即用的，便捷的字符串类。
+模仿Java的String，StringBuilder，StringBuffer等类，对std::string进行扩展，实现一个内存安全，可以开箱即用的，便捷的字符串类。
 
 ## 核心功能
 
