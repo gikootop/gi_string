@@ -1,0 +1,49 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+PROJECT(gistring VERSION 0.5.0)
+ 
+###
+### local script
+### 
+# ADD_DEFINITIONS(-DUSE_CXX)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
+FILE(GLOB SRC_HEADER_LIST ${CMAKE_SOURCE_DIR}/include/*.h ${CMAKE_SOURCE_DIR}/include/*.hpp)
+FILE(GLOB SRC_SOURCE_LIST ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/*.cc ${CMAKE_SOURCE_DIR}/src/*.cpp ${CMAKE_SOURCE_DIR}/src/*.cxx)
+SET(SRC_LIST ${SRC_HEADER_LIST} ${SRC_SOURCE_LIST})
+# SOURCE_GROUP("Headers"  FILES ${SRC_HEADER_LIST})
+# SOURCE_GROUP("Sources" FILES ${SRC_SOURCE_LIST})
+ 
+###
+### 3rdparty
+### 
+# INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/3rdparty/include")
+# LINK_DIRECTORIES("${CMAKE_SOURCE_DIR}/3rdparty/lib")
+# SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath-link=${CMAKE_SOURCE_DIR}/3rdparty/lib")
+#SET(EXTRA_LIBS )
+ 
+###
+### opencv
+### 
+# if (WIN32)
+#     #MESSAGE(STATUS "Windows: ")
+#     SET(OpenCV_DIR "D:/ENV/opencv-4.5.5")
+# elseif(APPLE)
+#     MESSAGE(STATUS "Apple: ")
+# else ()
+#     #MESSAGE(STATUS "Linux: ")
+#     SET(OpenCV_DIR "/usr/lib/cmake/opencv4")
+# endif ()
+# FIND_PACKAGE(OpenCV REQUIRED)
+# INCLUDE_DIRECTORIES( ${OpenCV_INCLUDE_DIRS} )
+# 
+# SET(EXTRA_LIBS ${EXTRA_LIBS} ${OpenCV_LIBS})
+ 
+###
+### target: 
+### 
+# ADD_LIBRARY( demo SHARED ${SRC_LIST} ${CMAKE_SOURCE_DIR}/demo/main.cpp)
+# SET(EXTRA_LIBS ${EXTRA_LIBS} demo)
+# ADD_LIBRARY( gistring ${SRC_LIST} ${CMAKE_SOURCE_DIR}/demo/main.cpp)
+# TARGET_LINK_LIBRARIES( gistring ${EXTRA_LIBS} )
+# TARGET_COMPILE_DEFINITIONS( gistring PRIVATE API_EXPORTS)
+# SET_TARGET_PROPERTIES(gistring PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" )
+ADD_LIBRARY( gistring ${SRC_LIST})
