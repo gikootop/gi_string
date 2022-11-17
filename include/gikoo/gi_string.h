@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @brief GiKoo字符串类
  *
  * @file gi_string.h
