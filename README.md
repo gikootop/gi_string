@@ -4,6 +4,10 @@
 
 模仿Java的String，StringBuilder，StringBuffer等类，对std::string进行扩展，实现一个内存安全，可以开箱即用的，便捷的字符串类。
 
+如果对本项目感兴趣，发现问题，都可以给我（GiKoo@aliyun.com）发送邮件。
+我将尽量完善本类。
+
+
 ## 核心功能
 
 - [ ] 集成String的基本操作。
