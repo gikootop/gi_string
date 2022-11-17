@@ -99,7 +99,7 @@ char GiString::charAt(size_t index) const
 
 char &GiString::operator[](size_t index)
 {
-    char ret;
+    static char ret;
     return ret;
 }
 
