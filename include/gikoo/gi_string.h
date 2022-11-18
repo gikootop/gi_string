@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <vector>
 #include <climits>
+#include <memory>
 
 namespace GiKoo
 {
@@ -40,21 +41,6 @@ namespace GiKoo
         GiString(const GiString &str);
 
         /**
-         * @brief 创建GiString对象，默认字符集
-         *
-         * @param str 拷贝元
-         */
-        GiString(const char *str);
-
-        /**
-         * @brief 创建GiString对象，指定字符集
-         *
-         * @param str 拷贝元
-         * @param charsetName 字符集名
-         */
-        GiString(const char *str, const char *charsetName);
-
-        /**
          * @brief 创建GiString对象，指定子串，指定字符集
          *
          * @param str 拷贝元
@@ -62,7 +48,10 @@ namespace GiKoo
          * @param length 子串长度
          * @param charsetName 字符集名
          */
-        GiString(const char *str, size_t offset, size_t length, const char *charsetName);
+        GiString(const char *str, 
+                size_t offset = 0, 
+                size_t length = SIZE_MAX, 
+                const char *charsetName = "");
 
         virtual ~GiString();
 
@@ -72,9 +61,10 @@ namespace GiKoo
          *
          * @param another 待比较的字符串
          *
-         * @return 第一个不相同的字符所在位置
+         * @retval null 字符串相同相同
+         * @retval ptr 第一个不相同的字符所在位置
          */
-        virtual size_t compareTo(const GiString &another) const;
+        virtual const char* compareTo(const GiString &another) const;
 
         /**
          * @brief 比较两个字符串
@@ -248,17 +238,7 @@ namespace GiKoo
          */
         virtual GiString subString(size_t offset, size_t length) const;
 
-    public: // 查询类API
-        /**
-         * @brief 返回指定位置的字符
-         *
-         * @note 如果index是非法数值，将返回0
-         *
-         * @param index 指定位置
-         *
-         * @return 字符
-         */
-        virtual char charAt(size_t index) const;
+    public: // 修改类API
 
         /**
          * @brief 返回指定位置的字符
@@ -270,6 +250,56 @@ namespace GiKoo
          * @return 字符
          */
         virtual char &operator[](size_t index);
+
+        /**
+         * @brief 拷贝字符串
+         * 
+         * @param str 被拷贝字符串
+        */
+        virtual GiString& copy(const GiString& str);
+
+        /**
+         * @brief 拷贝字符串
+         * 
+         * @param str 被拷贝字符串
+         * @param length 最大拷贝字符数
+         * 
+        */
+        virtual GiString& copy(const char* str, size_t length = SIZE_MAX);
+
+        /**
+         * @brief 重载等号操作符
+         * 
+         * @param str 被拷贝字符串
+         * 
+         * @return 自身引用
+        */
+        virtual GiString& operator=(const GiString& str);
+
+        /**
+         * @brief 清空字符串
+        */
+        virtual void empty();
+
+    public: // 查询类API
+
+        /**
+         * @brief 字符串指针
+         * 
+         * @return 返回内部数据变量
+        */
+        virtual const char* c_str() const;
+
+        /**
+         * @brief 返回指定位置的字符
+         *
+         * @note 如果index是非法数值，将返回0
+         *
+         * @param index 指定位置
+         *
+         * @return 字符
+         */
+        virtual char charAt(size_t index) const;
 
         /**
          * @brief 查询指定字符
@@ -391,5 +421,8 @@ namespace GiKoo
          * @retval false 不包含
          */
         virtual bool endsWith(const GiString &suffix) const;
+
+    private:
+        std::shared_ptr<char> m_data;
     };
 }
