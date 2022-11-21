@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GiString", "GiString.vcxproj", "{87DC4B47-BE70-416D-9DE4-F4C665529B91}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gi_string", "GiString.vcxproj", "{87DC4B47-BE70-416D-9DE4-F4C665529B91}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_test", "unit_test\unit_test.vcxproj", "{A1CFD0D8-E161-415A-B476-0E458C4D98C8}"
 	ProjectSection(ProjectDependencies) = postProject
