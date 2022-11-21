@@ -34,3 +34,7 @@
 # IDE
 .vs/
 build/
+*.user
+*.filters
+packages/
+lib/
