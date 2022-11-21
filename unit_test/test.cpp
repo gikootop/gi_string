@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+﻿#include "gtest/gtest.h"
 #include "gikoo/gi_string.h"
 
 using namespace GiKoo;
@@ -43,4 +43,24 @@ TEST(GiStringUnit, ParamConstruction) {
 	EXPECT_EQ(b.length(), 2);
 
 	EXPECT_TRUE(true);
+}
+
+TEST(GiStringUnit, Compare) {
+
+	GiString a = { "abcd" };
+	GiString b = { "abcd" };
+	GiString c = { "" };
+	GiString d = { "aecd" };
+	GiString e;
+
+	EXPECT_TRUE(a.equals(b));
+	EXPECT_TRUE(b.equals(a));
+	EXPECT_FALSE(a.equals(c));
+	EXPECT_FALSE(c.equals(a));
+	EXPECT_FALSE(a.equals(d));
+	EXPECT_FALSE(d.equals(a));
+	EXPECT_FALSE(a.equals(e));
+	EXPECT_FALSE(e.equals(a));
+	EXPECT_TRUE(c.equals(e));
+	EXPECT_TRUE(e.equals(c));
 }

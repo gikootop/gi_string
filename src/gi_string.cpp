@@ -1,6 +1,7 @@
 ﻿#include "gikoo/gi_string.h"
 #include <cstring>
 #include <cmath>
+#include <cassert>
 
 #define MIN(x,y) (x > y ? y : x)
 #define MAX(x,y) (x > y ? x : y)
@@ -8,6 +9,7 @@
 #define UNUSED_VAR(x) ((void)x)
 
 using namespace GiKoo;
+
 
 GiString::GiString()
 {
@@ -19,7 +21,7 @@ GiString::GiString(const GiString& str)
 	copy(str);
 }
 
-GiString::GiString(const char* str, size_t offset, size_t length, const char* charsetName)
+GiString::GiString(const GI_STRING_DATA_TYPE* str, size_t offset, size_t length, const GI_STRING_DATA_TYPE* charsetName)
 {
 	// TODO: 未使用的变量
 	UNUSED_VAR(charsetName);
@@ -45,15 +47,30 @@ GiString::GiString(const char* str, size_t offset, size_t length, const char* ch
 
 GiString::~GiString()
 {
+	if (m_data)
+	{
+		delete[] m_data;
+	}
 }
 
-const char* GiString::compareTo(const GiString& another) const
+const GI_STRING_DATA_TYPE* GiString::compareTo(const GiString& another) const
 {
-	if (!isEmpty() && !another.isEmpty()) return nullptr;
-	if (!isEmpty() || !another.isEmpty()) return m_data.get();
+	if (isEmpty() && another.isEmpty()) return nullptr;
+	if (isEmpty() || another.isEmpty()) return m_data;
 
-	// TODO: 未实现
-	return nullptr;
+	const GI_STRING_DATA_TYPE* cur = m_data;
+	const GI_STRING_DATA_TYPE* anotherCur = another.m_data;
+	while (*cur != '\0' && *anotherCur != '\0')
+	{
+		if (*cur != *anotherCur) break;
+
+		++cur;
+		++anotherCur;
+	}
+	
+	if (*cur == '\0' && *anotherCur == '\0') return nullptr;
+
+	return cur;
 }
 
 bool GiString::equals(const GiString& another) const
@@ -66,7 +83,7 @@ bool GiString::operator==(const GiString& another) const
 	return compareTo(another) == nullptr;
 }
 
-bool GiString::matches(const char* regex) const
+bool GiString::matches(const GI_STRING_DATA_TYPE* regex) const
 {
 	// TODO: Not Implements
 	return false;
@@ -80,7 +97,7 @@ bool GiString::contains(const GiString& str) const
 
 bool GiString::isBlank() const
 {
-	auto cur = m_data.get();
+	auto cur = m_data;
 	while (*cur != '\0')
 	{
 		if (*cur != ' ') return false;
@@ -130,7 +147,7 @@ GiString GiString::toUpperCase() const
 	return "";
 }
 
-GiString GiString::replace(char oldChar, char newChar) const
+GiString GiString::replace(GI_STRING_DATA_TYPE oldChar, GI_STRING_DATA_TYPE newChar) const
 {
 	// TODO: Not Implements
 	return "";
@@ -168,22 +185,31 @@ GiString GiString::subString(size_t offset, size_t length) const
 	return "";
 }
 
-char& GiString::operator[](size_t index)
+GI_STRING_DATA_TYPE& GiString::operator[](size_t index)
 {
 	if (index >= length())
 	{
 		index = 0;
 	}
-	return m_data.get()[index];
+	return m_data[index];
 }
 
 GiString& GiString::copy(const GiString& str)
 {
-	m_data = str.m_data;
+	size_t realLen = str.length() + 1;
+	m_data = new GI_STRING_DATA_TYPE[realLen];
+	assert(m_data != nullptr);
+
+	// 内存拷贝
+	memcpy(m_data, str.m_data, sizeof(GI_STRING_DATA_TYPE) * realLen);
+
+	// 字符串结束符补位
+	m_data[realLen - 1] = 0;
+
 	return *this;
 }
 
-GiString& GiString::copy(const char* str, size_t length)
+GiString& GiString::copy(const GI_STRING_DATA_TYPE* str, size_t length)
 {
 	if (!str)
 	{
@@ -191,15 +217,15 @@ GiString& GiString::copy(const char* str, size_t length)
 		return *this;
 	}
 
-	size_t realLen = MIN(strlen(str) + 1, length);
-	m_data = std::shared_ptr<char>(new char[realLen](), std::default_delete<char[]>());
+	size_t realLen = MIN(strlen(str), length) + 1;
+	m_data = new GI_STRING_DATA_TYPE[realLen];
+	assert(m_data != nullptr);
 
 	// 内存拷贝
-	auto c_str = m_data.get();
-	memcpy(c_str, str, sizeof(char) * realLen);
+	memcpy(m_data, str, sizeof(GI_STRING_DATA_TYPE) * (realLen));
 
 	// 字符串结束符补位
-	c_str[realLen] = 0;
+	m_data[realLen - 1] = 0;
 
 	return *this;
 }
@@ -212,22 +238,25 @@ GiString& GiString::operator=(const GiString& str)
 
 void GiString::empty()
 {
-	m_data = std::shared_ptr<char>(new char[1](), std::default_delete<char[]>());
-	m_data.get()[0] = 0;
+	m_data = new GI_STRING_DATA_TYPE[1];
+	assert(m_data != nullptr);
+
+	m_data[0] = 0;
 }
 
-const char* GiString::c_str() const
+const GI_STRING_DATA_TYPE* GiString::c_str() const
 {
-	return m_data.get();
+	return m_data;
 }
 
-char GiString::charAt(size_t index) const
+GI_STRING_DATA_TYPE GiString::charAt(size_t index) const
 {
+	assert(m_data != nullptr);
 	if (index >= length()) return 0;
-	return m_data.get()[index];
+	return m_data[index];
 }
 
-size_t GiString::indexOf(char ch, size_t offset) const
+size_t GiString::indexOf(GI_STRING_DATA_TYPE ch, size_t offset) const
 {
 	// TODO: Not Implements
 	return 0;
@@ -239,7 +268,7 @@ size_t GiString::indexOf(const GiString& str, size_t offset) const
 	return 0;
 }
 
-size_t GiString::lastIndexOf(char ch, size_t offset) const
+size_t GiString::lastIndexOf(GI_STRING_DATA_TYPE ch, size_t offset) const
 {
 	// TODO: Not Implements
 	return 0;
@@ -253,9 +282,8 @@ size_t GiString::lastIndexOf(const GiString& str, size_t offset) const
 
 size_t GiString::length() const
 {
-	auto c_str = m_data.get();
-	if (!c_str) return 0;
-	return strlen(c_str);
+	if (!m_data) return 0;
+	return strlen(m_data);
 }
 
 size_t GiString::hashCode() const

@@ -20,6 +20,8 @@
 
 namespace GiKoo
 {
+	typedef char GI_STRING_DATA_TYPE;
+
 	/**
 	 * @brief GiString类
 	 *
@@ -48,10 +50,10 @@ namespace GiKoo
 		 * @param length 子串长度
 		 * @param charsetName 字符集名
 		 */
-		GiString(const char* str,
+		GiString(const GI_STRING_DATA_TYPE* str,
 			size_t offset = 0,
 			size_t length = SIZE_MAX,
-			const char* charsetName = "");
+			const GI_STRING_DATA_TYPE* charsetName = nullptr);
 
 		virtual ~GiString();
 
@@ -64,7 +66,7 @@ namespace GiKoo
 		 * @retval null 字符串相同相同
 		 * @retval ptr 第一个不相同的字符所在位置
 		 */
-		virtual const char* compareTo(const GiString& another) const;
+		virtual const GI_STRING_DATA_TYPE* compareTo(const GiString& another) const;
 
 		/**
 		 * @brief 比较两个字符串
@@ -94,7 +96,7 @@ namespace GiKoo
 		 * @retval true 正则表达式匹配成功
 		 * @retval false 正则表达式匹配失败
 		 */
-		virtual bool matches(const char* regex) const;
+		virtual bool matches(const GI_STRING_DATA_TYPE* regex) const;
 
 		/**
 		 * @brief 是否包含指定字符串
@@ -173,7 +175,7 @@ namespace GiKoo
 		 *
 		 * @return 替换后的字符串副本
 		 */
-		virtual GiString replace(char oldChar, char newChar) const;
+		virtual GiString replace(GI_STRING_DATA_TYPE oldChar, GI_STRING_DATA_TYPE newChar) const;
 
 		/**
 		 * @brief 使用新字符串替换旧字符串
@@ -240,7 +242,7 @@ namespace GiKoo
 		 *
 		 * @return 字符
 		 */
-		virtual char& operator[](size_t index);
+		virtual GI_STRING_DATA_TYPE& operator[](size_t index);
 
 		/**
 		 * @brief 拷贝字符串
@@ -256,7 +258,7 @@ namespace GiKoo
 		 * @param length 最大拷贝字符数
 		 *
 		*/
-		virtual GiString& copy(const char* str, size_t length = SIZE_MAX);
+		virtual GiString& copy(const GI_STRING_DATA_TYPE* str, size_t length = SIZE_MAX);
 
 		/**
 		 * @brief 重载等号操作符
@@ -279,7 +281,7 @@ namespace GiKoo
 		 *
 		 * @return 返回内部数据变量
 		*/
-		virtual const char* c_str() const;
+		virtual const GI_STRING_DATA_TYPE* c_str() const;
 
 		/**
 		 * @brief 返回指定位置的字符
@@ -290,7 +292,7 @@ namespace GiKoo
 		 *
 		 * @return 字符
 		 */
-		virtual char charAt(size_t index) const;
+		virtual GI_STRING_DATA_TYPE charAt(size_t index) const;
 
 		/**
 		 * @brief 查询指定字符
@@ -300,7 +302,7 @@ namespace GiKoo
 		 *
 		 * @return 查询结果。如果未查询到，返回SIZE_MAX
 		 */
-		virtual size_t indexOf(char ch, size_t offset = 0) const;
+		virtual size_t indexOf(GI_STRING_DATA_TYPE ch, size_t offset = 0) const;
 
 		/**
 		 * @brief 查询指定字符串
@@ -320,7 +322,7 @@ namespace GiKoo
 		 *
 		 * @return 查询结果。如果未查询到，返回SIZE_MAX
 		 */
-		virtual size_t lastIndexOf(char ch, size_t offset = 0) const;
+		virtual size_t lastIndexOf(GI_STRING_DATA_TYPE ch, size_t offset = 0) const;
 
 		/**
 		 * @brief 倒序查询指定字符串
@@ -368,6 +370,6 @@ namespace GiKoo
 		virtual bool endsWith(const GiString& suffix) const;
 
 	private:
-		std::shared_ptr<char> m_data;
+		GI_STRING_DATA_TYPE* m_data;
 	};
 }
