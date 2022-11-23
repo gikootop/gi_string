@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cmath>
 #include <cassert>
+#include <unordered_set>
 
 #define MIN(x,y) (x > y ? y : x)
 #define MAX(x,y) (x > y ? x : y)
@@ -91,8 +92,7 @@ bool GiString::matches(const GI_STRING_DATA_TYPE* regex) const
 
 bool GiString::contains(const GiString& str) const
 {
-	// TODO: Not Implements
-	return false;
+	return strstr(m_data, str.m_data) != nullptr;
 }
 
 bool GiString::isBlank() const
@@ -111,28 +111,84 @@ bool GiString::isEmpty() const
 	return length() == 0;
 }
 
-GiString GiString::strip()
+GiString GiString::strip(const GI_STRING_DATA_TYPE* coll)
 {
-	// TODO: Not Implements
-	return "";
+	return stripLeading(coll).stripTrailing(coll);
 }
 
-GiString GiString::stripLeading()
+GiString GiString::stripLeading(const GI_STRING_DATA_TYPE* coll)
 {
-	// TODO: Not Implements
-	return "";
+	if (coll == nullptr) coll = " \r\n\t";
+
+	std::unordered_set<GI_STRING_DATA_TYPE> set;
+	while (*coll != '\0')
+	{
+		set.emplace(*coll++);
+	}
+
+	char* cur = m_data;
+	while (*cur != '\0')
+	{
+		if (set.find(*cur) != set.end())
+			++cur;
+		else
+			break;
+	}
+	
+	return cur;
 }
 
-GiString GiString::stripTrailing()
+GiString GiString::stripTrailing(const GI_STRING_DATA_TYPE* coll)
 {
-	// TODO: Not Implements
-	return "";
+	if (coll == nullptr) coll = " \r\n\t";
+	std::unordered_set<GI_STRING_DATA_TYPE> set;
+	while (*coll != '\0')
+	{
+		set.emplace(*coll++);
+	}
+	set.emplace('\0');
+
+	char* cur = m_data + length();
+	while (cur >= m_data)
+	{
+		if (set.find(*cur) != set.end())
+			--cur;
+		else
+			break;
+	}
+
+	return subString(0, cur - m_data + 1);
 }
 
 GiString GiString::trim()
 {
-	// TODO: Not Implements
-	return "";
+	return trimStart().trimEnd();
+}
+
+GiString GiString::trimStart()
+{
+	char* cur = m_data;
+	while (*cur != '\0')
+	{
+		if (*cur <= 0x20)
+			++cur;
+		else
+			break;
+	}
+	return cur;
+}
+
+GiString GiString::trimEnd()
+{
+	char* cur = m_data + length();
+	while (cur >= m_data)
+	{
+		if (*cur <= 0x20)
+			--cur;
+		else
+			break;
+	}
+	return subString(0, cur - m_data + 1);
 }
 
 GiString GiString::toLowerCase() const
@@ -181,8 +237,7 @@ std::vector<GiString> GiString::lines() const
 
 GiString GiString::subString(size_t offset, size_t length) const
 {
-	// TODO: Not Implements
-	return "";
+	return { m_data, 0, length };
 }
 
 GI_STRING_DATA_TYPE& GiString::operator[](size_t index)

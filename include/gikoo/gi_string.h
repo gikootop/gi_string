@@ -126,32 +126,51 @@ namespace GiKoo
 
 	public: // 返回新GiString
 		/**
-		 * @brief 移除字符串头部和尾部的空格
+		 * @brief 移除字符串头部和尾部的指定符号
 		 *
+		 * @details 未传任何字符时，默认剔除' ','\r','\n','\t'
+		 * 
+		 * @param coll 需要剔除的符号字符串。默认为" \r\n\t"
 		 * @return 修改后的字符串副本
 		 */
-		virtual GiString strip();
+		virtual GiString strip(const GI_STRING_DATA_TYPE* coll = nullptr);
 
 		/**
-		 * @brief 移除字符串头部的空格
+		 * @brief 移除字符串头部的指定符号
 		 *
+		 * @param coll 需要剔除的符号字符串。默认为" \r\n\t"
 		 * @return 修改后的字符串副本
 		 */
-		virtual GiString stripLeading();
+		virtual GiString stripLeading(const GI_STRING_DATA_TYPE* coll = nullptr);
 
 		/**
-		 * @brief 移除字符串尾部的空格
+		 * @brief 移除字符串尾部的指定符号
 		 *
+		 * @param coll 需要剔除的符号字符串。默认为" \r\n\t"
 		 * @return 修改后的字符串副本
 		 */
-		virtual GiString stripTrailing();
+		virtual GiString stripTrailing(const GI_STRING_DATA_TYPE* coll = nullptr);
 
 		/**
-		 * @brief 移除字符串头部和尾部的空格，以及小于0x20的字符
+		 * @brief 移除字符串头部和尾部的小于等于0x20的字符
 		 *
 		 * @return 修改后的字符串副本
 		 */
 		virtual GiString trim();
+
+		/**
+		 * @brief 移除字符串头部的小于等于0x20的字符
+		 *
+		 * @return 修改后的字符串副本
+		 */
+		virtual GiString trimStart();
+
+		/**
+		 * @brief 移除字符串尾部的小于等于0x20的字符
+		 *
+		 * @return 修改后的字符串副本
+		 */
+		virtual GiString trimEnd();
 
 		/**
 		 * @brief 切换为全小写字符
